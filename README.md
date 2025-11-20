@@ -1,10 +1,9 @@
 # Claude Code Marketplace
 
-<img src="assets/claude-icon.png" alt="Claude" height="18" align="left">
-
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Plugins](https://img.shields.io/badge/plugins-1-blue.svg)](https://github.com/alberduris/claude-code-marketplace)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-orange.svg)](https://www.claude.com/product/claude-code)
+<img src="assets/claude-icon.png" alt="Claude" height="18" style="margin-left: 6px; vertical-align: middle;">
 
 Claude Code Plugins Marketplace by [@alberduris](https://x.com/alberduris).
 
