@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Plugins](https://img.shields.io/badge/plugins-1-blue.svg)](https://github.com/alberduris/claude-code-marketplace)
-![Claude](https://storage.googleapis.com/sm-artworks/5719926a-04ae-4afb-9925-f1f4521d38ce/proof_retina_3x.png?cacheFor=ae97e86eaf931cb075104b625e1708fe)
+[![Claude Code](https://img.shields.io/badge/Claude-Code-orange.svg)](https://claude.ai/code)
 
 Claude Code Plugins Marketplace by [@alberduris](https://x.com/alberduris).
 
