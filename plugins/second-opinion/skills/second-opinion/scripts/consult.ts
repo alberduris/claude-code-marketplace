@@ -1,12 +1,32 @@
-#!/usr/bin/env tsx
+#!/usr/bin/env node
 
-import { readFileSync } from 'fs';
+import { readFileSync, existsSync } from 'fs';
 import { resolve } from 'path';
-import OpenAI from 'openai';
 
 interface Args {
   message: string;
   files?: string[];
+}
+
+function loadApiKey(): string | undefined {
+  // Try .env.local first
+  const envLocalPath = resolve(process.cwd(), '.env.local');
+  if (existsSync(envLocalPath)) {
+    const content = readFileSync(envLocalPath, 'utf-8');
+    const match = content.match(/^OPENAI_API_KEY=(.+)$/m);
+    if (match) return match[1].trim();
+  }
+
+  // Try .env second
+  const envPath = resolve(process.cwd(), '.env');
+  if (existsSync(envPath)) {
+    const content = readFileSync(envPath, 'utf-8');
+    const match = content.match(/^OPENAI_API_KEY=(.+)$/m);
+    if (match) return match[1].trim();
+  }
+
+  // Fall back to system environment variable
+  return process.env.OPENAI_API_KEY;
 }
 
 function parseArgs(): Args {
@@ -55,81 +75,74 @@ function buildPrompt(message: string, files?: string[]): string {
 async function main() {
   const { message, files } = parseArgs();
 
-  const apiKey = process.env.OPENAI_API_KEY;
+  const apiKey = loadApiKey();
   if (!apiKey) {
-    console.error('Error: OPENAI_API_KEY environment variable not set');
+    console.error('Error: OPENAI_API_KEY not found. Checked: .env.local, .env, system environment');
     process.exit(1);
   }
 
   const model = process.env.SECOND_OPINION_MODEL || 'gpt-5-pro-2025-10-06';
-  const timeoutMs = parseInt(process.env.SECOND_OPINION_TIMEOUT || '1800000', 10); // 30min default
-  const client = new OpenAI({ apiKey, timeout: timeoutMs });
-
+  const timeoutMs = parseInt(process.env.SECOND_OPINION_TIMEOUT || '1800000', 10);
   const prompt = buildPrompt(message, files);
 
+  const requestBody = {
+    model,
+    input: [
+      {
+        role: 'developer',
+        content: 'Peer SWE consultant; use web search when helpful.'
+      },
+      {
+        role: 'user',
+        content: prompt
+      }
+    ],
+    tools: [
+      {
+        type: 'web_search',
+        user_location: { type: 'approximate' },
+        search_context_size: 'medium'
+      }
+    ],
+    store: false
+  };
+
   try {
-    const response = await client.responses.create({
-      model,
-      input: [
-        {
-          role: 'developer',
-          content: 'Peer SWE consultant; use web search when helpful.'
-        },
-        {
-          role: 'user',
-          content: prompt
-        }
-      ],
-      text: {
-        format: {
-          type: 'text'
-        }
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+    const response = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`
       },
-      reasoning: {
-        summary: 'auto'
-      },
-      tools: [
-        {
-          type: 'web_search',
-          user_location: {
-            type: 'approximate'
-          },
-          search_context_size: 'medium'
-        }
-      ],
-      store: false,
-      include: [
-        'reasoning.encrypted_content',
-        'web_search_call.action.sources'
-      ]
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
     });
+
+    clearTimeout(timeoutId);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error(`Error: API request failed with status ${response.status}`);
+      console.error(errorText);
+      process.exit(1);
+    }
+
+    const data = await response.json();
 
     console.log('\n=== PEER CONSULTANT RESPONSE ===\n');
 
-    // Extract reasoning summary
-    if (response.reasoning?.summary === 'detailed') {
-      const reasoningOutput = response.output?.find((o: any) => o.type === 'reasoning');
-      if (reasoningOutput?.summary) {
-        console.log('## Reasoning\n');
-        for (const item of reasoningOutput.summary) {
-          if (item.type === 'summary_text') {
-            console.log(item.text);
-            console.log('');
-          }
-        }
-        console.log('---\n');
-      }
-    }
-
     // Extract response text
     console.log('## Response\n');
-    const responseText = response.output_text ||
-                        response.output?.find((o: any) => o.type === 'message')?.content?.[0]?.text ||
+    const responseText = data.output_text ||
+                        data.output?.find((o: any) => o.type === 'message')?.content?.[0]?.text ||
                         'No response generated';
     console.log(responseText);
 
     // Extract web search sources if present
-    const webSearchOutput = response.output?.find((o: any) => o.type === 'web_search');
+    const webSearchOutput = data.output?.find((o: any) => o.type === 'web_search_call');
     if (webSearchOutput?.action?.sources) {
       console.log('\n## Sources Used\n');
       webSearchOutput.action.sources.forEach((source: { url: string; title?: string }) => {
@@ -139,7 +152,11 @@ async function main() {
     }
 
   } catch (error) {
-    console.error('Error calling peer consultant:', error instanceof Error ? error.message : error);
+    if (error instanceof Error && error.name === 'AbortError') {
+      console.error('Error: Request timed out');
+    } else {
+      console.error('Error calling peer consultant:', error instanceof Error ? error.message : error);
+    }
     process.exit(1);
   }
 }

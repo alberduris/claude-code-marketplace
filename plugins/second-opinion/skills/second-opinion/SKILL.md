@@ -10,14 +10,15 @@ Use this skill when you need an alternative perspective on technical decisions, 
 
 ## Usage
 
-Invoke the consultation script with your question and relevant context files:
+Invoke the consultation script using the **base directory shown above** when this skill loads:
 
 ```bash
-source .env.local && pnpm exec tsx .claude/skills/second-opinion/scripts/consult.ts --message "your question" --files path1,path2,path3
+npx tsx <base_directory>/scripts/consult.ts --message "your question" --files path1,path2,path3
 ```
 
 **Important**:
-- Must source `.env.local` to load `OPENAI_API_KEY`; use `pnpm exec tsx` to execute TypeScript
+- Replace `<base_directory>` with the actual "Base directory for this skill" path shown above
+- The script will look for `OPENAI_API_KEY` in this order: `.env.local`, `.env`, system environment variable
 - Default timeout is 30 minutes; match this in your Bash tool timeout parameter (1800000ms)
 - Do NOT run in background—synchronous execution avoids polling overhead
 
