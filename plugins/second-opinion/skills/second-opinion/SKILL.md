@@ -13,7 +13,7 @@ Use this skill when you need an alternative perspective on technical decisions, 
 Invoke the consultation script using the **base directory shown above** when this skill loads:
 
 ```bash
-npx tsx <base_directory>/scripts/consult.ts --message "your question" --files path1,path2,path3
+bash <base_directory>/scripts/consult.sh --message "your question" --files path1,path2,path3
 ```
 
 **Important**:
