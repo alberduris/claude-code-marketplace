@@ -8,13 +8,22 @@ interface Args {
   files?: string[];
 }
 
+function stripQuotes(value: string): string {
+  const trimmed = value.trim();
+  if ((trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+      (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+    return trimmed.slice(1, -1);
+  }
+  return trimmed;
+}
+
 function loadApiKey(): string | undefined {
   // Try .env.local first
   const envLocalPath = resolve(process.cwd(), '.env.local');
   if (existsSync(envLocalPath)) {
     const content = readFileSync(envLocalPath, 'utf-8');
     const match = content.match(/^OPENAI_API_KEY=(.+)$/m);
-    if (match) return match[1].trim();
+    if (match) return stripQuotes(match[1]);
   }
 
   // Try .env second
@@ -22,7 +31,7 @@ function loadApiKey(): string | undefined {
   if (existsSync(envPath)) {
     const content = readFileSync(envPath, 'utf-8');
     const match = content.match(/^OPENAI_API_KEY=(.+)$/m);
-    if (match) return match[1].trim();
+    if (match) return stripQuotes(match[1]);
   }
 
   // Fall back to system environment variable
