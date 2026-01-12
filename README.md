@@ -1,7 +1,7 @@
 # Claude Code Marketplace
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Plugins](https://img.shields.io/badge/plugins-2-blue.svg)](https://github.com/alberduris/claude-code-marketplace)
+[![Plugins](https://img.shields.io/badge/plugins-3-blue.svg)](https://github.com/alberduris/claude-code-marketplace)
 [![Claude Code](https://img.shields.io/badge/Claude-Code-orange.svg)](https://www.claude.com/product/claude-code)
 <img src="assets/claude-icon.png" alt="Claude" height="18" style="margin-left: 6px; vertical-align: middle;">
 
@@ -16,10 +16,12 @@ Zero-bullshit definitions without AI slop so we all know what we're talking abou
 **Marketplace**: A git repository with a [`.claude-plugin/marketplace.json`](.claude-plugin/marketplace.json) file listing available Plugins.
 
 **Plugin**: A packaged directory containing one or more of the following, plus [`.claude-plugin/plugin.json`](plugins/second-opinion/.claude-plugin/plugin.json) with metadata (name, version, author):
-- **Skill**: A `SKILL.md` file with instructions Claude reads when contextually relevant. Can include supporting files (scripts, templates). Claude invokes based on description matching user's request.
-- **Command**: Custom slash command (e.g., `/commit`) that expands to a prompt when invoked.
+- **Skill**: Directory with `SKILL.md` + supporting files (scripts, templates, docs).
+- **Command**: Single `.md` file.
 - **Agent**: Isolated autonomous agent launched via Task tool; runs multi-turn conversation with tools (agent ↔ tools), returns final result. ([Learn more](https://alberduris.beehiiv.com/p/claude-code-sub-agents-what-they-are-and-what-they-are-not))
 - **Hook**: Script triggered by events (file edits, tool calls, user prompt submission).
+
+> **Invocation**: Both Skills and Commands can be invoked 3 ways: manually (`/name`), by Claude via `Skill` tool, or auto-discovered by context. The only difference is structure. Use `disable-model-invocation: true` in frontmatter if you want manual-only.
 
 ## Quick Start
 
@@ -31,7 +33,7 @@ Add the Marketplace and install Plugins through Claude Code:
 # Add this Marketplace
 /plugin marketplace add alberduris/claude-code-marketplace
 
-# Install the second-opinion Plugin
+# Install a Plugin
 /plugin install second-opinion
 ```
 
@@ -45,69 +47,13 @@ claude plugins install alberduris/claude-code-marketplace second-opinion
 
 ## Available Plugins
 
-- [`second-opinion`](#second-opinion-skill---second-opinion) - Consult GPT-5 Pro for alternative perspectives
-- [`langfuse-traces`](#langfuse-traces-skill---langfuse-traces) - Query Langfuse traces for debugging and observability
+| Plugin | Description |
+|--------|-------------|
+| [second-opinion](plugins/second-opinion/) | Consult GPT-5 Pro for alternative perspectives on technical decisions |
+| [langfuse-traces](plugins/langfuse-traces/) | Query Langfuse traces for debugging and observability |
+| [slack-reminders](plugins/slack-reminders/) | Schedule future reminders via Slack notifications |
 
-### Second Opinion (Skill) - `second-opinion`
-
-Consult GPT-5 Pro for alternative perspectives when you need second opinion, peer review, or fresh take on technical decisions.
-
-**Usage:** Automatically triggered when requesting "second opinion", "peer review", or "alternative perspective".
-
-| Features |
-|----------|
-| Context injection from multiple files |
-| Web search capability (OpenAI responses API) |
-| Configurable model selection (gpt-5-pro default, gpt-5-nano tested) |
-| Reasoning summary extraction |
-| 30-minute timeout for complex queries |
-| Calling agent retains final judgment authority |
-
-| Requirements |
-|--------------|
-| `OPENAI_API_KEY` environment variable |
-| Node.js/pnpm for TypeScript execution |
-
-#### Configuration
-
-After installation, configure your environment with the required API key:
-
-```bash
-# Add to your .env.local
-OPENAI_API_KEY=your-api-key-here
-```
-
-Optional configuration:
-```bash
-SECOND_OPINION_MODEL=gpt-5-pro-2025-10-06  # default model
-SECOND_OPINION_TIMEOUT=1800000             # 30min timeout in ms
-```
-
-### Langfuse Traces (Skill) - `langfuse-traces`
-
-Query Langfuse traces for debugging LLM calls, analyzing token usage, and investigating workflow executions.
-
-| Commands |
-|----------|
-| `traces [limit] [session_id] [name]` - List recent traces |
-| `trace <trace_id>` - Get full trace with observations |
-| `observations [limit] [trace_id]` - List spans/generations |
-| `sessions [limit]` - List sessions |
-| `summary [limit]` - Compact one-line-per-trace view |
-
-| Requirements |
-|--------------|
-| `curl` and `jq` (standard on macOS/Linux) |
-| Langfuse credentials in environment |
-
-#### Configuration
-
-```bash
-# Add to your .env.local
-LANGFUSE_PUBLIC_KEY=pk-lf-...
-LANGFUSE_SECRET_KEY=sk-lf-...
-LANGFUSE_BASE_URL=https://cloud.langfuse.com  # optional, default
-```
+See each plugin's README for setup and usage instructions.
 
 ## License
 

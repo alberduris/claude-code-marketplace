@@ -29,6 +29,17 @@
       },
       "source": "./plugins/langfuse-traces",
       "category": "observability"
+    },
+    {
+      "name": "slack-reminders",
+      "description": "Schedule future reminders via Slack. Invoke when user wants to be reminded, notified, or alerted at a specific future date/time.",
+      "version": "1.0.0",
+      "author": {
+        "name": "alberduris",
+        "email": "alberduris@summiz.ai"
+      },
+      "source": "./plugins/slack-reminders",
+      "category": "productivity"
     }
   ]
 }

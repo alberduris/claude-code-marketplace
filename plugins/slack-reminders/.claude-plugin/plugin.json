@@ -1,0 +1,9 @@
+{
+  "name": "slack-reminders",
+  "version": "1.0.0",
+  "description": "Schedule future reminders via Slack. Invoke when user wants to be reminded, notified, pinged, or alerted at a specific future date/time.",
+  "author": {
+    "name": "alberduris",
+    "email": "alberduris@summiz.ai"
+  }
+}
