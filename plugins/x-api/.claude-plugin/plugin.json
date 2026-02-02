@@ -1,9 +1,0 @@
-{
-  "name": "x-api",
-  "version": "0.5.0",
-  "description": "31-command Claude Code skill for X/Twitter — post, search, engage, moderate, all from your terminal",
-  "author": {
-    "name": "alberduris",
-    "email": "alberduris@summiz.ai"
-  }
-}
