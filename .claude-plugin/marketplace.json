@@ -40,6 +40,28 @@
       },
       "source": "./plugins/slack-reminders",
       "category": "productivity"
+    },
+    {
+      "name": "taxonomy-filesystem",
+      "description": "Local-first, agent-first Taxonomy-as-filesystem for documentation. One-time setup skill that scaffolds docs/ ontology with .purpose files.",
+      "version": "1.0.0",
+      "author": {
+        "name": "alberduris",
+        "email": "alberduris@gmail.com"
+      },
+      "source": "./plugins/taxonomy-filesystem",
+      "category": "documentation"
+    },
+    {
+      "name": "x-api",
+      "description": "Interact with X (Twitter) API v2 — post, read timeline, search, and more using your own developer credentials",
+      "version": "0.1.0",
+      "author": {
+        "name": "alberduris",
+        "email": "alberduris@summiz.ai"
+      },
+      "source": "./plugins/x-api",
+      "category": "productivity"
     }
   ]
 }
