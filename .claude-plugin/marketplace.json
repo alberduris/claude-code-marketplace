@@ -53,7 +53,7 @@
       "category": "documentation"
     },
     {
-      "name": "x-api",
+      "name": "x-twitter",
       "description": "31-command Claude Code skill for X/Twitter — post, search, engage, moderate, all from your terminal",
       "version": "0.5.0",
       "author": {

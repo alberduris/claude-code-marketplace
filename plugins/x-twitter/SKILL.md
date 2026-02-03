@@ -5,7 +5,7 @@ license: MIT
 metadata:
   author: alberduris
   version: "1.0.0"
-  tags: x, twitter, x-api, twitter-api, social-media, tweets, automation
+  tags: x, twitter, x-twitter, twitter-api, social-media, tweets, automation
 allowed-tools: Bash(node *), Bash(npm *), Bash(npx *), Bash(ls *)
 ---
 
