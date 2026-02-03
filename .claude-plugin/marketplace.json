@@ -54,13 +54,13 @@
     },
     {
       "name": "x-api",
-      "description": "Interact with X (Twitter) API v2 — post, read timeline, search, and more using your own developer credentials",
-      "version": "0.3.0",
+      "description": "31-command Claude Code skill for X/Twitter — post, search, engage, moderate, all from your terminal",
+      "version": "0.5.0",
       "author": {
         "name": "alberduris",
         "email": "alberduris@summiz.ai"
       },
-      "source": "./plugins/x-api",
+      "source": "./plugins/x-twitter",
       "category": "productivity"
     }
   ]
