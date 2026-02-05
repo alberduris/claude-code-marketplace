@@ -62,4 +62,4 @@ Discovery:
 ad) `search-users` — search users by query. @docs/search-users.md.
 ae) `trending` — trending topics (worldwide or personalized). @docs/trending.md.
 
-[!CREDENTIALS] Four OAuth 1.0a variables are REQUIRED: `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET`. They resolve from the first source that provides them: a) `.env.local` in cwd, b) `.env` in cwd, c) `.env.local` in the plugin directory, d) `.env` in the plugin directory, e) environment variables. Obtain them from the X Developer Console (Apps > Keys and tokens).
+[!CREDENTIALS] Four OAuth 1.0a variables are REQUIRED: `X_API_KEY`, `X_API_SECRET`, `X_ACCESS_TOKEN`, `X_ACCESS_TOKEN_SECRET`. They resolve from the first source that provides them: a) `.env.local` in cwd, b) `.env` in cwd, c) `.env.local` in the plugin directory, d) `.env` e) `~/.clawdbot/secrets/x-api.json` in the plugin directory, e) environment variables. Obtain them from the X Developer Console (Apps > Keys and tokens).

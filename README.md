@@ -52,6 +52,7 @@ claude plugins install alberduris/claude-code-marketplace second-opinion
 | [second-opinion](plugins/second-opinion/) | Consult GPT-5 Pro for alternative perspectives on technical decisions |
 | [langfuse-traces](plugins/langfuse-traces/) | Query Langfuse traces for debugging and observability |
 | [slack-reminders](plugins/slack-reminders/) | Schedule future reminders via Slack notifications |
+| [x-twitter](plugins/x-twitter/) | Interact with X (Twitter) API v2. Post tweets, search, engage, moderate, and analyze |
 
 See each plugin's README for setup and usage instructions.
 

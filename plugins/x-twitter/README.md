@@ -1,4 +1,4 @@
-# X API
+# x-twitter
 
 31-command Claude Code skill for X/Twitter. Post, search, engage, moderate — all from your terminal.
 
